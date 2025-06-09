@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarm Clock</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  
+ 
+<div class="alarm">
+  <div class="clock">
+    <img src="./Image&Audio/alarmClock.jpeg" alt="">
+  </div>
+  <h4>10:08:05 AM</h4>
+
+  <div class="time-selection">
+    <select id="hour">
+      <option value="HOUR">HOUR</option>
+    </select>
+
+     <select id="minute">
+      <option value="MINUTE">MINUTE</option>
+    </select>
+
+     <select id="ampm">
+      <option value="AM/PM">AM/PM</option>
+    </select>
+  </div>
+
+  <button onclick="setAlarm();">Set Alarm</button>
+</div>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
