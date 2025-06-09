@@ -1,80 +1,88 @@
 let h4 = document.querySelector("h4");
-let selectTags = document.querySelectorAll("select");
+let allSelectTags = document.querySelectorAll("select");
+let button = document.querySelector("button");
 let alarmTime;
-let isAlarmTime = false;
-for (let i = 12; i >= 0; i--) {
+let isAlarmSet = false;
+let audio = new Audio("./Image&Audio/ringtone.mp3");
+for (let i = 12; i > 0; i--) {
     i = i < 10 ? "0" + i : i;
     let optionTag = `<option value="${i}">${i}</option>`;
-    selectTags[0].insertAdjacentHTML("afterbegin", optionTag)
+    allSelectTags[0].firstElementChild.insertAdjacentHTML("beforebegin", optionTag);
 }
 
 
 for (let i = 59; i >= 0; i--) {
     i = i < 10 ? "0" + i : i;
     let optionTag = `<option value="${i}">${i}</option>`;
-    selectTags[1].insertAdjacentHTML("afterbegin", optionTag)
+    allSelectTags[1].firstElementChild.insertAdjacentHTML("beforebegin", optionTag);
 }
 
-
-
-for (let i = 2; i > 0; i--) {
-    let ampm = i === 1 ? "AM" : "PM";
+for (let i = 0; i < 2; i++) {
+    ampm = i == 0 ? "AM" : "PM";
     let optionTag = `<option value="${ampm}">${ampm}</option>`;
-    selectTags[2].insertAdjacentHTML("afterbegin", optionTag);
+    allSelectTags[2].firstElementChild.insertAdjacentHTML("beforebegin", optionTag);
 }
 
 
 
 setInterval(() => {
-    let date = new Date();
-    let hour = date.getHours();
-    let minute = date.getMinutes();
-    let second = date.getSeconds();
+    let newDate = new Date();
+    let hour = newDate.getHours();
+    let minute = newDate.getMinutes();
+    let second = newDate.getSeconds();
     let ampm;
-    let h = hour < 10 ? "0" + hour : hour;
-    let m = minute < 10 ? "0" + minute : minute;
-    let s = second < 10 ? "0" + second : second;
+    h = hour < 10 ? "0" + hour : hour;
+    m = minute < 10 ? "0" + minute : minute;
+    s = second < 10 ? "0" + second : second;
 
     if (h >= 12) {
-        h = h - 12;
-        h = h == 0 ? 12 : h;
+        h -= 12;
         ampm = "PM";
     } else {
         ampm = "AM";
+        h4.textContent = `${h}:${m}:${s} ${ampm}`;
+        let currentTime = `${h}:${m} ${ampm}`;
+        if (alarmTime === currentTime) {
+            isAlarmSet = true;
+            audio.play();
+            audio.loop = true;
+        }
     }
-
-    let currentTime = `${h}:${m} ${ampm}`;
-    h4.textContent = `${h}:${m}:${s} ${ampm}`;
-   if(currentTime === alarmTime){
-    isAlarmTime = true;
-    document.querySelector("h5").innerText = "Ringing..........";
-    document.querySelector("button").innerText = "Clear Alarm";
-   }
 }, 1000);
 
 
 
 
-
-
-
-function setAlarm() {
-    let hVal = selectTags[0].value;
-    let mVal = selectTags[1].value;
-    let sVal = selectTags[2].value;
-    if (hVal === "hour" ||
-        mVal === "minute" || 
-        sVal === "AM/PM") {
+let setAlarm = () => {
+    if (isAlarmSet) {
+        alarmTime = "";
+        audio.pause();
+        button.innerText = "Set Alarm";
+        allSelectTags[0].style.opacity = "1";
+        allSelectTags[1].style.opacity = "1";
+        allSelectTags[2].style.opacity = "1";
+        allSelectTags[0].style.pointerEvents = "fill";
+        allSelectTags[1].style.pointerEvents = "fill";
+        allSelectTags[2].style.pointerEvents = "fill";
+        return isAlarmSet = false;
+    }
+    let selectVal1 = allSelectTags[0].value;
+    let selectVal2 = allSelectTags[1].value;
+    let selectVal3 = allSelectTags[2].value;
+    if (
+        selectVal1.includes("HOUR") ||
+        selectVal2.includes("MINUTE") ||
+        selectVal3.includes("AM/PM")) {
         alert("Please! set a valid time");
     } else {
-
-         alarmTime = `${hVal}:${mVal} ${sVal}`;
-        alert("Time setting is correct");
-    }
-
-    if(isAlarmTime){
-        hVal
-        document.querySelector("h5").innerText = "";
-    document.querySelector("button").innerText = "Set Alarm";
+        isAlarmSet = true;
+        button.innerText = "Clear Alarm";
+        allSelectTags[0].style.opacity = "0.5";
+        allSelectTags[1].style.opacity = "0.5";
+        allSelectTags[2].style.opacity = "0.5";
+        allSelectTags[0].style.pointerEvents = "none";
+        allSelectTags[1].style.pointerEvents = "none";
+        allSelectTags[2].style.pointerEvents = "none";
+        alarmTime = `${selectVal1}:${selectVal2} ${selectVal3}`;
     }
 }
